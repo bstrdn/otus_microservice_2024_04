@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otus-microservice
+  labels:
+    app: otus-microservice
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: otus-microservice
+  template:
+    metadata:
+      labels:
+        app: otus-microservice
+    spec:
+      containers:
+        - name:  otus-microservice
+          image: bstrdn/otus_microservice
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 60
+            periodSeconds: 15
+            timeoutSeconds: 2
+            successThreshold: 1
+            failureThreshold: 2
