@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "otusMicroservice.fullname" . }}-initial-migration-job
+  labels:
+    app.kubernetes.io/name: {{ include "otusMicroservice.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+spec:
+  template:
+    spec:
+      containers:
+        - name: flyway
+          image: {{ .Values.migration.image.repository }}:{{ .Values.migration.image.tag }}
+          env:
+            - name: FLYWAY_URL
+              value: {{ .Values.migration.database.url }}
+            - name: FLYWAY_USER
+              value: {{ .Values.postgresql.auth.username }}
+            - name: FLYWAY_PASSWORD
+              value: {{ .Values.postgresql.auth.password }}
+            - name: FLYWAY_LOCATIONS
+              value: filesystem:/flyway/sql
+          volumeMounts:
+            - name: flyway-migrations
+              mountPath: /flyway/sql
+      restartPolicy: Never
+      volumes:
+        - name: flyway-migrations
+          configMap:
+            name: {{ include "otusMicroservice.fullname" . }}-migrations-configmap
+  backoffLimit: {{ .Values.migration.backoffLimit }}

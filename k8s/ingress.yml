@@ -15,5 +15,5 @@ spec:
                 name: otus-microservice
                 port:
                   number: 8000
-            path: /otusapp/(.*)/(.*)
+            path: /otusapp/([a-zA-Z]{1,50})/([a-zA-Z]{1,50})
             pathType: ImplementationSpecific
