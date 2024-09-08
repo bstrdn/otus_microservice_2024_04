@@ -6,7 +6,7 @@ metadata:
     app.kubernetes.io/name: {{ include "otusMicroservice.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   annotations:
-    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "0"
 spec:
   template:
     spec:
@@ -25,6 +25,8 @@ spec:
           volumeMounts:
             - name: flyway-migrations
               mountPath: /flyway/sql
+          command: [ "sh", "-c" ]
+          args: [ "flyway migrate" ]
       restartPolicy: Never
       volumes:
         - name: flyway-migrations

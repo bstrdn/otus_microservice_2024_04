@@ -23,8 +23,12 @@ paths:
       description: This can only be done by the logged in user.
       operationId: createUser
       responses:
-        default:
-          description: successful operation
+        '200':
+          description: user response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
       requestBody:
         content:
           application/json:
@@ -41,6 +45,7 @@ paths:
                   phone: '+71002003040'
         description: Created user object
         required: true
+
   /user/{userId}:
     parameters:
       - name: userId

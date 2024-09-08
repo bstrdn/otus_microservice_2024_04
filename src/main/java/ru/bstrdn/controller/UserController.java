@@ -13,9 +13,9 @@ public class UserController implements UserApi {
   private final UserService userService;
 
   @Override
-  public ResponseEntity<Void> createUser(User user) {
-    userService.createUser(user);
-    return ResponseEntity.ok().build();
+  public ResponseEntity<User> createUser(User user) {
+    User saved = userService.createUser(user);
+    return ResponseEntity.ok(saved);
   }
 
   @Override
@@ -32,6 +32,7 @@ public class UserController implements UserApi {
 
   @Override
   public ResponseEntity<Void> updateUser(Long userId, User user) {
+    user.setId(userId);
     userService.updateUser(userId, user);
     return ResponseEntity.ok().build();
   }

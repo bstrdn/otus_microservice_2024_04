@@ -19,9 +19,10 @@ public class UserService {
   private final UserMapper userMapper;
 
   @Transactional
-  public void createUser(User user) {
+  public User createUser(User user) {
     UserEntity userEntity = userMapper.toEntity(user);
-    userRepository.save(userEntity);
+    UserEntity saved = userRepository.save(userEntity);
+    return userMapper.toDto(saved);
   }
 
   @Transactional

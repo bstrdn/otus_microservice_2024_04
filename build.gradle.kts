@@ -11,7 +11,7 @@ plugins {
     id("io.freefair.lombok") version "8.6"
 }
 
-version = "0.0.1-SNAPSHOT"
+version = "0.0.6-SNAPSHOT"
 val jacksonDataVersion = "2.17.1"
 
 idea {

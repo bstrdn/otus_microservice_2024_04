@@ -29,11 +29,13 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort
+  port: 8080
+  nodePort: 30080
 
 ingress:
   enabled: true
+  host: "arch.homework"
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
@@ -68,7 +70,7 @@ resources: {}
 
 livenessProbe:
   tcpSocket:
-    port: 8000
+    port: 8080
   initialDelaySeconds: 60
   periodSeconds: 15
   timeoutSeconds: 2
@@ -76,7 +78,7 @@ livenessProbe:
   failureThreshold: 2
 readinessProbe:
   tcpSocket:
-    port: 8000
+    port: 8080
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 2
@@ -107,6 +109,7 @@ postgresql:
     username: postgres
     password: postgres
     database: postgres
+  fullnameOverride: postgresql
 
 migration:
   image:
@@ -114,5 +117,4 @@ migration:
     tag: latest
   database:
     url: jdbc:postgresql://postgresql:5432/postgres
-    secret: db-credentials
   backoffLimit: 4
